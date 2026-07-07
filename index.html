@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pavithra — Full Stack & App Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0a0a;
+    --bg-soft: #1a1a1a;
+    --card: #1f1f1f;
+    --line: #333333;
+    --purple: #3498db;
+    --purple-light: #5dade2;
+    --lavender: #2ecc71;
+    --text: #ffffff;
+    --muted: #cccccc;
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Sora', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(24px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+  @keyframes photoIn{
+    from{opacity:0; transform:scale(0.94) translateY(16px);}
+    to{opacity:1; transform:scale(1) translateY(0);}
+  }
+  @keyframes underlineGrow{
+    from{transform:scaleX(0);}
+    to{transform:scaleX(1);}
+  }
+
+  /* hero entrance sequence */
+  .hero-eyebrow, .hero-title, .hero-role, .hero-foot{
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+  }
+  .hero-eyebrow{animation-delay:.1s;}
+  .hero-title{animation-delay:.25s;}
+  .hero-role{animation-delay:.42s;}
+  .hero-foot{animation-delay:.58s;}
+  .hero-photo-wrap{
+    opacity:0;
+    animation:photoIn 1s cubic-bezier(.2,.8,.2,1) forwards;
+    animation-delay:.35s;
+  }
+
+
+  /* scroll reveal */
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .stagger.visible .stagger-item{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .stagger-item{
+    opacity:0;
+    transform:translateY(20px);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  .stagger-item:nth-child(1){transition-delay:0s;}
+  .stagger-item:nth-child(2){transition-delay:.08s;}
+  .stagger-item:nth-child(3){transition-delay:.16s;}
+  .stagger-item:nth-child(4){transition-delay:.24s;}
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-eyebrow, .hero-title, .hero-role, .hero-foot, .hero-photo-wrap, .spirit{
+      animation:none !important; opacity:1 !important; transform:none !important;
+    }
+    .reveal, .stagger-item{
+      opacity:1 !important; transform:none !important; transition:none !important;
+    }
+  }
+
+  /* ambient glow backdrop - starry night theme */
+  .glow{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    pointer-events:none;
+    background:
+      radial-gradient(1000px circle at 20% 30%, rgba(52,152,219,0.08), transparent 60%),
+      radial-gradient(800px circle at 80% 70%, rgba(46,204,113,0.06), transparent 60%),
+      radial-gradient(900px circle at 40% 80%, rgba(52,152,219,0.05), transparent 60%);
+  }
+
+  /* starry night sky with soft blue-green glow */
+  .glow::before{
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-image:
+      radial-gradient(1.5px 1.5px at 10% 15%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 40% 10%, rgba(46,204,113,0.5), transparent),
+      radial-gradient(1px 1px at 55% 60%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1.5px 1.5px at 70% 25%, rgba(133,193,233,0.6), transparent),
+      radial-gradient(1px 1px at 85% 55%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(2px 2px at 15% 75%, rgba(52,152,219,0.5), transparent),
+      radial-gradient(1px 1px at 33% 88%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1.5px 1.5px at 50% 35%, rgba(46,204,113,0.4), transparent),
+      radial-gradient(1px 1px at 65% 92%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 78% 80%, rgba(133,193,233,0.5), transparent),
+      radial-gradient(2px 2px at 92% 20%, rgba(52,152,219,0.5), transparent),
+      radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 95% 92%, rgba(46,204,113,0.4), transparent);
+    background-size:60% 60%;
+    background-repeat:repeat;
+    animation:starTwinkle 12s ease-in-out infinite;
+  }
+
+  @keyframes starTwinkle{
+    0%, 100%{opacity:0.5;}
+    50%{opacity:1;}
+  }
+
+  /* extra floating stars sprinkled across the page */
+  .glow::after{
+    content:'✦ ✧ ⋆ ✦ ✧ ⋆ ✦ ✧';
+    position:absolute;
+    inset:0;
+    color:rgba(255,255,255,0.35);
+    font-size:14px;
+    line-height:14vh;
+    letter-spacing:12vw;
+    word-spacing:20vw;
+    word-wrap:break-word;
+    overflow:hidden;
+    animation:starTwinkle 8s ease-in-out infinite reverse;
+  }
+
+  /* glowing moon element - starry night theme */
+  .moon{
+    position:fixed;
+    top:40px;
+    right:60px;
+    width:90px;
+    height:90px;
+    background:radial-gradient(circle at 40% 40%, #eaf2f8 0%, #85c1e9 40%, #1b4f72 100%);
+    border-radius:50%;
+    box-shadow:
+      0 0 50px rgba(52,152,219,0.8),
+      0 0 100px rgba(52,152,219,0.5),
+      inset -15px -15px 30px rgba(0,0,0,0.4);
+    z-index:1;
+    animation:moonGlow 5s ease-in-out infinite;
+  }
+
+  @keyframes moonGlow{
+    0%, 100%{box-shadow:0 0 50px rgba(52,152,219,0.8), 0 0 100px rgba(52,152,219,0.5), inset -15px -15px 30px rgba(0,0,0,0.4);}
+    50%{box-shadow:0 0 70px rgba(52,152,219,1), 0 0 120px rgba(52,152,219,0.7), inset -15px -15px 30px rgba(0,0,0,0.4);}
+  }
+
+  @media(max-width:760px){
+    .moon{width:70px; height:70px; top:20px; right:20px;}
+    .moon-mini{transform:scale(0.7);}
+  }
+
+  .moon-mini{
+    position:fixed;
+    border-radius:50%;
+    z-index:1;
+    pointer-events:none;
+    background:radial-gradient(circle at 40% 40%, #eaf2f8 0%, #85c1e9 40%, #1b4f72 100%);
+  }
+  .moon-mini.m1{width:36px; height:36px; top:22%; left:8%; opacity:0.75; box-shadow:0 0 24px rgba(52,152,219,0.5);}
+  .moon-mini.m2{width:22px; height:22px; top:65%; left:88%; opacity:0.6; box-shadow:0 0 18px rgba(46,204,113,0.45);}
+  .moon-mini.m3{width:16px; height:16px; top:85%; left:15%; opacity:0.55; box-shadow:0 0 14px rgba(52,152,219,0.4);}
+  .moon-mini.m4{width:26px; height:26px; top:45%; left:92%; opacity:0.5; box-shadow:0 0 16px rgba(46,204,113,0.4);}
+
+  .wrap{max-width:920px; margin:0 auto; padding:0 24px; position:relative; z-index:1;}
+
+  header{
+    padding:20px 0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    background:rgba(10,10,10,0.98);
+    backdrop-filter:blur(10px);
+    z-index:10;
+    border-bottom:1px solid rgba(46,204,113,0.35);
+    transition:border-color .3s, box-shadow .3s;
+    box-shadow:0 2px 20px rgba(52,152,219,0.15);
+  }
+  header.scrolled{border-color:rgba(52,152,219,0.5); box-shadow:0 4px 30px rgba(46,204,113,0.25);}
+  .logo{
+    font-family:var(--mono);
+    font-size:14px;
+    letter-spacing:0.5px;
+    color:var(--purple-light);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo::before{
+    content:'🌕';
+    font-size:16px;
+    color:#3498db;
+  }
+  nav{display:flex; gap:28px;}
+  nav a{
+    position:relative;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    transition:color .2s;
+    padding-bottom:3px;
+  }
+  nav a::after{
+    content:'';
+    position:absolute;
+    left:0; bottom:0;
+    width:100%; height:2px;
+    background:#3498db;
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .3s ease;
+    box-shadow:0 0 10px rgba(52,152,219,0.5);
+  }
+  nav a:hover, nav a:focus-visible{color:#3498db;}
+  nav a:hover::after, nav a:focus-visible::after{transform:scaleX(1);}
+
+  /* HERO */
+  .hero{
+    min-height:88vh;
+    display:grid;
+    grid-template-columns:1.3fr 0.9fr;
+    align-items:center;
+    gap:40px;
+    position:relative;
+    padding-top:40px;
+  }
+  .hero-photo-wrap{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    perspective:800px;
+  }
+  .hero-photo-glow{
+    position:absolute;
+    width:340px;
+    height:340px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(139,92,246,0.35), transparent 70%);
+    filter:blur(10px);
+    z-index:0;
+  }
+  .hero-photo{
+    position:relative;
+    z-index:1;
+    width:300px;
+    height:380px;
+    object-fit:cover;
+    border-radius:24px;
+    border:1px solid var(--line);
+    box-shadow:0 20px 60px rgba(139,92,246,0.25);
+    transition:transform .3s ease-out;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  @media(max-width:760px){
+    .hero{grid-template-columns:1fr; text-align:left;}
+    .hero-photo-wrap{order:-1; margin-bottom:10px;}
+    .hero-photo{width:220px; height:280px;}
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:13px;
+    color:#3498db;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px; height:2px;
+    background:#3498db;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:clamp(44px, 9vw, 84px);
+    line-height:1.02;
+    letter-spacing:-2px;
+    background:linear-gradient(135deg, #fff 20%, #85c1e9 50%, #3498db 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 40px rgba(52,152,219,0.3);
+  }
+  .role{
+    font-family:var(--display);
+    font-size:clamp(18px,3vw,26px);
+    font-weight:600;
+    color:var(--muted);
+    margin-top:14px;
+  }
+  .role span{color:#3498db;}
+  .hero-foot{
+    margin-top:36px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:14px;
+    padding:13px 26px;
+    border-radius:999px;
+    text-decoration:none;
+    transition:transform .2s, box-shadow .2s;
+    display:inline-block;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, #3498db, #5dade2);
+    color:#000;
+    font-weight:700;
+    box-shadow:0 4px 20px rgba(52,152,219,0.4);
+    border:2px solid transparent;
+    transition:all .3s;
+  }
+  .btn-primary:hover{
+    transform:translateY(-3px); 
+    box-shadow:0 8px 30px rgba(52,152,219,0.6);
+    border-color:#3498db;
+  }
+  .btn-ghost{
+    border:2px solid;
+    border-image:linear-gradient(135deg, #3498db, #2ecc71) 1;
+    color:#3498db;
+    transition:all .3s;
+  }
+  .btn-ghost:hover{border-color:#5dade2; color:#5dade2; transform:translateY(-2px); background:rgba(52,152,219,0.1);}
+
+  /* floating ghost signature element */
+  .spirit{
+    position:absolute;
+    font-size:34px;
+    right:6%;
+    top:8%;
+    opacity:0;
+    animation:fadeIn .8s ease forwards, drift 7s ease-in-out infinite 1.1s;
+    animation-delay:1.1s, 1.1s;
+    filter:drop-shadow(0 0 20px rgba(46,204,113,0.7)) drop-shadow(0 0 20px rgba(52,152,219,0.7));
+  }
+  @keyframes drift{
+    0%,100%{transform:translateY(0) translateX(0);}
+    50%{transform:translateY(-18px) translateX(8px);}
+  }
+
+  section{padding:90px 0; border-top:1px solid var(--line); position:relative;}
+  .tag{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#3498db;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-bottom:14px;
+    font-weight:700;
+  }
+  .tag::before{content:'✨ '; color:#2ecc71;}
+  h2{
+    font-family:var(--display);
+    font-size:clamp(28px,4vw,38px);
+    font-weight:700;
+    margin-bottom:28px;
+    letter-spacing:-0.5px;
+    color:#fff;
+    text-shadow:0 0 20px rgba(52,152,219,0.2);
+  }
+
+  /* ABOUT */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  .bio{
+    font-size:19px;
+    line-height:1.75;
+    color:#dcd4f2;
+  }
+  .bio strong{color:var(--purple-light); font-weight:600;}
+  .facts{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    border-left:1px solid var(--line);
+    padding-left:28px;
+  }
+  .fact-label{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px;}
+  .fact-value{font-size:15px; margin-top:4px; font-weight:500;}
+
+  /* SKILLS */
+  .skills-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:16px;
+  }
+  .skill-card{
+    background:var(--card);
+    border:2px solid #333;
+    border-radius:14px;
+    padding:22px;
+    transition:all .3s;
+    box-shadow:0 0 20px rgba(52,152,219,0.05);
+  }
+  .skill-card:hover{
+    transform:translateY(-6px); 
+    border-image:linear-gradient(135deg, #3498db, #2ecc71) 1;
+    box-shadow:0 0 30px rgba(46,204,113,0.3);
+    background:#2a2a2a;
+  }
+  .skill-num{font-family:var(--mono); font-size:12px; color:#3498db;}
+  .skill-name{font-family:var(--display); font-weight:700; font-size:17px; margin-top:10px;}
+
+  /* WORKFLOW */
+  .flow-list{display:flex; flex-direction:column; gap:0;}
+  .flow-item{
+    display:flex;
+    gap:24px;
+    padding:22px 0;
+    border-bottom:1px solid rgba(46,204,113,0.25);
+    align-items:flex-start;
+  }
+  .flow-item:last-child{border-bottom:none;}
+  .flow-icon{
+    font-family:var(--mono);
+    color:#3498db;
+    font-size:13px;
+    width:38px;
+    flex-shrink:0;
+    padding-top:3px;
+  }
+  .flow-text h3{font-family:var(--display); font-size:16px; font-weight:600; margin-bottom:4px;}
+  .flow-text p{color:var(--muted); font-size:14px; line-height:1.5;}
+
+  /* CONTACT */
+  .contact-card{
+    background:linear-gradient(135deg, #1f1f1f, #2a2a2a);
+    border:2px solid;
+    border-image:linear-gradient(135deg, #3498db, #2ecc71) 1;
+    border-radius:20px;
+    padding:44px;
+    text-align:center;
+    box-shadow:0 0 40px rgba(46,204,113,0.15);
+  }
+  .contact-card p{color:var(--muted); margin-bottom:26px; font-size:15px;}
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .clink{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    border-radius:999px;
+    border:2px solid #333;
+    color:var(--text);
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+    transition:all .3s;
+  }
+  .clink:hover{border-image:linear-gradient(135deg, #3498db, #2ecc71) 1; background:rgba(46,204,113,0.1); color:#2ecc71; box-shadow:0 0 20px rgba(46,204,113,0.2);}
+
+  footer{
+    text-align:center;
+    padding:36px 0 50px;
+    color:var(--muted);
+    font-family:var(--mono);
+    font-size:12px;
+  }
+
+  /* DAILY MOOD */
+  .mood-container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    padding:24px;
+    background:var(--card);
+    border:2px solid;
+    border-image:linear-gradient(135deg, #3498db, #2ecc71) 1;
+    border-radius:14px;
+    box-shadow:0 0 25px rgba(46,204,113,0.15);
+  }
+  .mood-emoji{
+    font-size:48px;
+    display:inline-block;
+    animation:moodFade 0.6s ease-in-out;
+  }
+  @keyframes moodFade{
+    0%{opacity:0; transform:scale(0.5) rotate(-20deg);}
+    50%{opacity:1;}
+    100%{opacity:0; transform:scale(0.5) rotate(20deg);}
+  }
+  .mood-text{
+    font-size:18px;
+    font-weight:600;
+    color:#3498db;
+    min-width:120px;
+  }
+
+  @media(max-width:720px){
+    .about-grid{grid-template-columns:1fr;}
+    .facts{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px;}
+    nav{gap:16px;}
+    nav a{font-size:13px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .spirit{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--purple-light);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+<div class="moon" aria-hidden="true"></div>
+<div class="moon-mini m1" aria-hidden="true"></div>
+<div class="moon-mini m2" aria-hidden="true"></div>
+<div class="moon-mini m3" aria-hidden="true"></div>
+<div class="moon-mini m4" aria-hidden="true"></div>
+
+<header id="header">
+  <div class="wrap" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+    <div class="logo">PAVITHRA.DEV</div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#study">Study</a>
+      <a href="#mood">Daily Mood</a>
+      <a href="#skills">Skills</a>
+      <a href="#work">Workflow</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#family">Family</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero" style="border-top:none; padding-top:20px;">
+    <div>
+      <span class="spirit" aria-hidden="true">💚💙</span>
+      <div class="eyebrow hero-eyebrow">Portfolio</div>
+      <h1 class="hero-title">Pavithra</h1>
+      <div class="role hero-role">Full Stack Developer <span>&amp;</span> App Developer</div>
+      <div class="hero-foot">
+        <a href="#contact" class="btn btn-primary">Get in touch</a>
+        <a href="#about" class="btn btn-ghost">More about me</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-glow" aria-hidden="true"></div>
+      <img class="hero-photo" src="pavithra.jpeg" alt="Portrait of Pavithra">
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="tag reveal">01 — About</div>
+    <h2>A bit about me</h2>
+    <div class="about-grid reveal">
+      <p class="bio">Now I am <strong>struggling</strong>, but I believe only through <strong>hard work and effort</strong> can I build a good future in life. I keep pushing myself to work hard and become successful — one project, one skill at a time.</p>
+      <div class="facts">
+        <div>
+          <div class="fact-label">Birthday</div>
+          <div class="fact-value">July 8, 2008</div>
+        </div>
+        <div>
+          <div class="fact-label">Education</div>
+          <div class="fact-value">B.Sc IT</div>
+        </div>
+        <div>
+          <div class="fact-label">Focus</div>
+          <div class="fact-value">Full Stack &amp; App Development</div>
+        </div>
+        <div>
+          <div class="fact-label">Mindset</div>
+          <div class="fact-value">Consistent effort, steady growth</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="study">
+    <div class="tag reveal">02 — Study</div>
+    <h2>Where I'm studying</h2>
+    <div class="skills-grid stagger">
+      <div class="skill-card stagger-item">
+        <div class="skill-num">🎓</div>
+        <div class="skill-name">R.D. National College of Arts and Science</div>
+        <div class="fact-value" style="margin-top:10px; color:var(--muted); font-weight:500;">Course: B.Sc IT</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mood">
+    <div class="tag reveal">03 — Daily Mood</div>
+    <h2>What's my vibe today?</h2>
+    <div class="mood-container reveal">
+      <div class="mood-emoji" id="moodEmoji">📚</div>
+      <div class="mood-text" id="moodText">Learning</div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="tag reveal">04 — Skills</div>
+    <h2>What I work with</h2>
+    <div class="skills-grid stagger">
+      <div class="skill-card stagger-item">
+        <div class="skill-num">01</div>
+        <div class="skill-name">App Development</div>
+      </div>
+      <div class="skill-card stagger-item">
+        <div class="skill-num">02</div>
+        <div class="skill-name">Website Development</div>
+      </div>
+      <div class="skill-card stagger-item">
+        <div class="skill-num">03</div>
+        <div class="skill-name">Java Programming</div>
+      </div>
+      <div class="skill-card stagger-item">
+        <div class="skill-num">04</div>
+        <div class="skill-name">Video Editing</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="tag reveal">05 — Workflow</div>
+    <h2>How I build &amp; ship</h2>
+    <div class="flow-list stagger">
+      <div class="flow-item stagger-item">
+        <div class="flow-icon">→</div>
+        <div class="flow-text">
+          <h3>Creating portfolios</h3>
+          <p>Designing and building portfolio sites to showcase projects clearly.</p>
+        </div>
+      </div>
+      <div class="flow-item stagger-item">
+        <div class="flow-icon">→</div>
+        <div class="flow-text">
+          <h3>Uploading projects to GitHub</h3>
+          <p>Keeping my work organised and accessible in public repositories.</p>
+        </div>
+      </div>
+      <div class="flow-item stagger-item">
+        <div class="flow-icon">→</div>
+        <div class="flow-text">
+          <h3>Working with teams</h3>
+          <p>Collaborating on shared codebases and coordinating on features.</p>
+        </div>
+      </div>
+      <div class="flow-item stagger-item">
+        <div class="flow-icon">→</div>
+        <div class="flow-text">
+          <h3>Saving code versions</h3>
+          <p>Using version control to track changes and keep code history clean.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="achievements">
+    <div class="tag reveal">06 — Achievements</div>
+    <h2>Milestones</h2>
+    <div class="flow-list stagger">
+      <div class="flow-item stagger-item">
+        <div class="flow-icon">★</div>
+        <div class="flow-text">
+          <h3>Website Launched on Google</h3>
+          <p>Successfully built and published my personal portfolio website live on Google.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="family">
+    <div class="tag reveal">07 — Family</div>
+    <h2>My family</h2>
+    <div class="skills-grid stagger">
+      <div class="skill-card stagger-item">
+        <div class="skill-num">Father</div>
+        <div class="skill-name">Mahendiran</div>
+      </div>
+      <div class="skill-card stagger-item">
+        <div class="skill-num">Mother</div>
+        <div class="skill-name">Malathi</div>
+      </div>
+      <div class="skill-card stagger-item">
+        <div class="skill-num">Brother</div>
+        <div class="skill-name">Boobalan</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="tag reveal">08 — Contact</div>
+    <h2>Let's connect</h2>
+    <div class="contact-card reveal">
+      <p>Open to opportunities, collaborations, and new projects.</p>
+      <div class="contact-links">
+        <a class="clink" href="mailto:pavithranavi1308@gmail.com">✉ pavithranavi1308@gmail.com</a>
+        <a class="clink" href="https://instagram.com/_miz_brindhu_oxfcl" target="_blank" rel="noopener">📷 @_miz_brindhu_oxfcl</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Pavithra — built with effort &amp; moonlight</footer>
+</div>
+
+<script>
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .stagger');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('visible'));
+  }
+
+  // subtle tilt on hero photo
+  const photoWrap = document.querySelector('.hero-photo-wrap');
+  const photo = document.querySelector('.hero-photo');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (photoWrap && photo && !prefersReducedMotion){
+    photoWrap.addEventListener('mousemove', (e) => {
+      const rect = photoWrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      photo.style.transform = `rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+    });
+    photoWrap.addEventListener('mouseleave', () => {
+      photo.style.transform = 'rotateY(0deg) rotateX(0deg)';
+    });
+  }
+
+  // Daily mood rotation - STARRY NIGHT theme
+  const moods = [
+    { emoji: '🌕', text: 'Nocturnal' },
+    { emoji: '⚡', text: 'Powerful' },
+    { emoji: '⭐', text: 'Inspired' },
+    { emoji: '🌑', text: 'Dark' },
+    { emoji: '💻', text: 'Unstoppable' },
+    { emoji: '👁️', text: 'Focused' }
+  ];
+
+  let moodIndex = 0;
+  const moodEmoji = document.getElementById('moodEmoji');
+  const moodText = document.getElementById('moodText');
+
+  function rotateMood(){
+    moodIndex = (moodIndex + 1) % moods.length;
+    moodEmoji.style.animation = 'none';
+    setTimeout(() => {
+      moodEmoji.textContent = moods[moodIndex].emoji;
+      moodText.textContent = moods[moodIndex].text;
+      moodEmoji.style.animation = 'moodFade 0.6s ease-in-out';
+    }, 10);
+  }
+
+  // Rotate mood every 4 seconds
+  setInterval(rotateMood, 4000);
+</script>
+
+</body>
+</html>
